@@ -6,10 +6,8 @@ Ce projet contient la solution pour le TP 3, divisé en deux parties principales
 
 ```
 .
-├── instructions.txt                # Énoncé du TP
-├── input_ls.txt                    # Fichier de test pour l'exercice LS
-├── input_app.txt                   # Fichier de test pour l'exercice de sérialisation
 ├── products.dat                    # Fichier de données généré par la sérialisation
+├── README.md                       # Documentation du projet
 ├── partie1
 │   ├── exercice_ls
 │   │   └── SimulateurLS.java       # Exercice 1 : Simulation de la commande 'ls'
