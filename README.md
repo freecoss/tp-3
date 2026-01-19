@@ -1,170 +1,82 @@
 # TP 3 Java : Entrées/Sorties et Gestion des Exceptions
 
-Ce projet contient la solution pour le TP 3, divisé en deux parties principales : les opérations d'Entrées/Sorties (I/O) et la gestion des Exceptions en Java.
+Ce projet contient les solutions du TP 3, portant sur la manipulation des flux d'Entrées/Sorties (I/O) et la mise en œuvre de la gestion des exceptions en Java.
 
-## Structure du Projet
+## 🛠️ Technologies Utilisées
+- **Langage :** Java (JDK 8 ou supérieur)
+- **Concepts :** File I/O, Sérialisation d'objets, Exception handling, Interfaces.
 
-```
+## 📂 Structure du Projet
+
+```text
 .
-├── instructions.txt                # Énoncé du TP
-├── input_ls.txt                    # Fichier de test pour l'exercice LS
-├── input_app.txt                   # Fichier de test pour l'exercice de sérialisation
-├── products.dat                    # Fichier de données généré par la sérialisation
-├── partie1
-│   ├── exercice_ls
-│   │   └── SimulateurLS.java       # Exercice 1 : Simulation de la commande 'ls'
-│   └── exercice_serialization
-│       ├── Application.java        # Exercice 2 : Main avec menu utilisateur
-│       ├── IProduitMetier.java     # Interface métier
-│       ├── MetierProduitImpl.java  # Implémentation avec sérialisation
-│       └── Product.java            # Classe produit sérialisable
-└── partie2
-    ├── exercice_calculette
-    │   └── Calculator.java         # Exercice 1 : Calculatrice avec gestion d'erreurs
-    └── exercice_vehicule
-        ├── TooFastException.java   # Exercice 2 : Exception personnalisée
-        └── Vehicle.java            # Classe véhicule utilisant l'exception
+├── README.md                       # Documentation du projet
+├── instructions.txt                # Énoncé original du TP
+├── test_ls/                        # Dossier de test pour l'exercice LS
+├── partie1/                        # Partie I : Entrées/Sorties
+│   ├── exercice_ls/
+│   │   └── SimulateurLS.java       # Simulation de la commande 'ls'
+│   └── exercice_serialization/
+│       ├── Product.java            # Modèle (Serializable)
+│       ├── IProduitMetier.java     # Interface de gestion
+│       ├── MetierProduitImpl.java  # Implémentation de la logique
+│       └── Application.java        # Interface console (Menu)
+└── partie2/                        # Partie II : Gestion des Exceptions
+    ├── exercice_calculette/
+    │   └── Calculator.java         # Calculatrice avec try-catch
+    └── exercice_vehicule/
+        ├── TooFastException.java   # Exception personnalisée
+        └── Vehicle.java            # Test de l'exception
 ```
 
 ---
 
-## Partie 1 : Entrées/Sorties
+## 🚀 Comment exécuter les exercices
 
-### Exercice 1 : Simulation de la commande LS
-
-L'objectif est de simuler la commande `ls` pour lister le contenu d'un répertoire donné, en affichant si c'est un fichier `<FILE>` ou un dossier `<DIR>`, ainsi que les permissions (r/w/h).
-
-**Fichier source :** `partie1/exercice_ls/SimulateurLS.java`
-
-**Exécution et Démonstration :**
-
-Nous avons créé un dossier de test `test_ls` contenant :
-- `dossier1` (Répertoire)
-- `fichier1.txt` (Fichier en lecture seule)
-
-*Commande :*
+### 1. Compilation globale
+Depuis la racine du projet, compilez tous les fichiers :
 ```bash
-java -cp . partie1.exercice_ls.SimulateurLS
+javac partie1/exercice_ls/*.java partie1/exercice_serialization/*.java partie2/exercice_calculette/*.java partie2/exercice_vehicule/*.java
 ```
-*(Entrée : chemin absolu vers `test_ls`)*
 
-*Résultat :*
-```
-Entrez le chemin absolu du répertoire : C:\Users\DELL\Desktop\enset\java\tp 3\test_ls
-C:\Users\DELL\Desktop\enset\java\tp 3\test_ls\dossier1 <DIR> rw-
-C:\Users\DELL\Desktop\enset\java\tp 3\test_ls\fichier1.txt <FILE> r--
-```
+### 2. Exécutions individuelles
+
+#### Exercice LS (Partie 1)
+L'application demande un chemin de répertoire et affiche son contenu avec les permissions.
+- **Commande :** `java partie1.exercice_ls.SimulateurLS`
+- **Exemple :**
+  ```text
+  Entrez le chemin : C:\...\test_ls
+  .../dossier1 <DIR> rw-
+  .../fichier1.txt <FILE> r--
+  ```
+
+#### Gestion des Produits (Partie 1 - Sérialisation)
+Permet de gérer une liste de produits persistée dans `products.dat`.
+- **Commande :** `java partie1.exercice_serialization.Application`
+- **Fonctionnalités :** Ajout, Recherche, Suppression, Affichage, et Sauvegarde (Sérialisation).
+
+#### Calculatrice (Partie 2)
+Démontre la capture d'exceptions standard (ArithmeticException, NumberFormatException).
+- **Commande :** `java partie2.exercice_calculette.Calculator`
+- **Résultat :** Affiche des messages d'erreur personnalisés au lieu de faire planter le programme.
+
+#### Véhicule (Partie 2 - Exception Personnalisée)
+Démontre la création et le lancement d'une exception propre au domaine métier.
+- **Commande :** `java partie2.exercice_vehicule.Vehicle`
+- **Comportement :** Si la vitesse > 90, une `TooFastException` est levée et sa trace est affichée.
 
 ---
 
-### Exercice 2 : Sérialisation d'Objets
+## 📝 Détails des Implémentations
 
-Cet exercice met en œuvre la persistance de données (objets `Product`) dans un fichier binaire `products.dat` via la sérialisation Java. Une application console permet d'ajouter, lister, rechercher, supprimer et sauvegarder des produits.
+### Simulation LS
+Le programme utilise la classe `java.io.File` pour explorer le système de fichiers. Il vérifie les méthodes `isDirectory()`, `canRead()`, `canWrite()` et `isHidden()` pour construire la chaîne de caractères descriptive de chaque élément.
 
-**Fichiers sources :** `partie1/exercice_serialization/`
+### Sérialisation de Produits
+- **Product.java** : Implémente `Serializable` pour permettre l'écriture binaire.
+- **MetierProduitImpl.java** : Utilise `ObjectOutputStream` et `ObjectInputStream` pour sauvegarder et charger la liste complète des produits en une seule opération.
 
-**Exécution et Démonstration :**
-
-Scénario de test :
-1. Ajout d'un produit (ID: 1, Nom: "Ordi", Marque: "Dell", Prix: 1000, Desc: "Laptop", Stock: 10).
-2. Affichage de la liste.
-3. Sauvegarde dans le fichier.
-4. Quitter.
-
-*Commande :*
-```bash
-java -cp . partie1.exercice_serialization.Application
-```
-
-*Résultat :*
-```
-Menu :
-1. Afficher la liste des produits.
-2. Rechercher un produit par son id.
-3. Ajouter un nouveau produit.
-4. Supprimer un produit par id.
-5. Sauvegarder les produits.
-6. Quitter.
-Choisissez une option : 3
-Entrez l'ID : 1
-Entrez le nom : Ordi
-Entrez la marque : Dell
-Entrez le prix : 1000
-Entrez la description : Laptop
-Entrez le stock : 10
-Produit ajouté.
-
-Menu :
-...
-Choisissez une option : 1
-Product{id=1, name='Ordi', brand='Dell', price=1000.0, description='Laptop', stock=10}
-
-Menu :
-...
-Choisissez une option : 5
-Produits sauvegardés.
-
-Menu :
-...
-Choisissez une option : 6
-Au revoir.
-```
-
----
-
-## Partie 2 : Gestion des Exceptions
-
-### Exercice 1 : Calculatrice
-
-Implémentation d'une calculatrice simple qui gère les cas d'erreurs courants (division par zéro, format de nombre invalide, opération inconnue) sans planter l'application.
-
-**Fichier source :** `partie2/exercice_calculette/Calculator.java`
-
-**Exécution et Démonstration :**
-
-Le programme principal exécute une série de tests automatiques.
-
-*Commande :*
-```bash
-java -cp . partie2.exercice_calculette.Calculator
-```
-
-*Résultat :*
-```
---- Tests ---
-Résultat : 15                      # Test de 10 + 5
-Erreur : Division par zéro impossible.    # Test de 10 / 0
-Erreur : Opération '&' non supportée      # Test d'opération invalide
-Convert '123': 123                 # Conversion réussie
-Erreur : 'abc' n'est pas un nombre valide # Test de conversion invalide
-```
-
----
-
-### Exercice 2 : Exception Personnalisée (TooFastException)
-
-Création d'une exception personnalisée `TooFastException` levée lorsqu'un véhicule dépasse une certaine vitesse (90).
-
-**Fichiers sources :** `partie2/exercice_vehicule/`
-
-**Exécution et Démonstration :**
-
-Le programme teste deux vitesses : 80 (OK) et 120 (Trop vite).
-
-*Commande :*
-```bash
-java -cp . partie2.exercice_vehicule.Vehicle
-```
-
-*Résultat :*
-```
-Test de vitesse 80 :
-Vitesse 80 est OK.
-
-Test de vitesse 120 :
-partie2.exercice_vehicule.TooFastException: C'est une exception de type TooFastException. Vitesse en cause : 120
-        at partie2.exercice_vehicule.Vehicle.testSpeed(Vehicle.java:10)
-        at partie2.exercice_vehicule.Vehicle.main(Vehicle.java:26)
-```
-
-```
+### Gestion des Exceptions
+- Dans la **Calculatrice**, nous utilisons des blocs `try-catch` pour intercepter les erreurs de saisie ou de calcul mathématique.
+- Pour le **Véhicule**, l'exception `TooFastException` hérite de `Exception`, ce qui en fait une "checked exception" (elle doit être déclarée ou capturée).
